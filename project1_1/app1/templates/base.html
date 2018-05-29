@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            text-decoration: None;
+        }
+        .hide{
+            display: none;
+        }
+        .head{
+            width: 100%;
+            height: 60px;
+            background-color: black;
+            position: absolute;
+            top: 0px;
+        }
+        .head-user{
+            width: 100px;
+            height: 60px;
+            line-height: 60px;
+            text-align: center;
+            color: white;
+            float: right;
+            margin-right: 30px;
+        }
+        .menu{
+            width: 250px;
+            background-color: aqua;
+            position: absolute;
+            top: 60px;
+            left: 0;
+            bottom: 0;
+        }
+        .content{
+            position: absolute;
+            top: 60px;
+            bottom: 0;
+            right: 0;
+            left: 250px;
+            background-color:bisque;
+            overflow: auto;
+        }
+        .menu a{
+            display: block;
+            width: 250px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background-color:darkseagreen;
+            text-decoration: none;
+            color: dimgrey;      
+        }
+        .menu a:hover{
+            background-color: dodgerblue;
+        }
+        .modal{
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 500px;
+            height: 400px;
+            margin-top: -250px;
+            margin-left: -250px;
+            z-index: 100;
+            background: white;
+        }
+        .remove{
+            position: fixed;
+            top: 60%;
+            left: 50%;
+            width: 400px;
+            height: 200px;
+            margin-top: -250px;
+            margin-left: -250px;
+            z-index: 100;
+            background: red;
+        }
+        .shade{
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: black;
+            opacity: 0.5;
+            z-index: 99;
+        }
+        .pagination a{
+            display: inline-block;
+            padding: 5px;
+            margin: 5px;
+            width: 15px;
+            height: 15px;
+            line-height: 15px;
+            text-align: center;
+            color: white;
+            background-color:chocolate;
+        }
+        .pagination .list_up, .pagination .list_down{
+            width: 50px;
+        }
+        .pagination .active{
+            background: violet;
+        }
+    </style>
+</head>
+<body>
+    <div class="head">
+    <div class="head-user">{{ request.session.user_name }}</div>
+    </div>
+    <div class="menu">
+        <a href="{% url 'classes' %}">班级管理</a>
+        <a href="{% url 'student' %}">学生管理</a>
+        <a href="{% url 'teacher' %}">教师管理</a>
+    </div>
+    <div class="content">
+        {% block content %}
+        
+        {% endblock content %}
+    </div>
+    <script src="/static/jquery-3.3.1.js"></script>
+{% block js %}
+
+{% endblock js %}
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+     <table>
+         <thead>
+            <tr>
+                <th>教师姓名</th>
+                <th>教师密码</th>
+                <th>添加日期</th>
+                <th>管理班级</th>
+                <th>班级个数</th>
+            </tr>
+        
+         </thead>
+         <tbody>
+             {% for i in objs %}
+             <tr>
+                 <td>{{ i.teacherName }}</td>
+                 <td>{{ i.teacherPassword }}</td>
+                 <td>{{ i.date }}</td>
+                 <td> {% for b in i.classes.all %} {{ b.className }} {% endfor %}</td>
+                 <td>{{ i.classes.all.count }}</td> 
+             </tr>
+             {% endfor %}
+         </tbody>
+     </table>
+{% endblock content %}

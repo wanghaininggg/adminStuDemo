@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <button id="add_class">添加班级</button>
+    <table>
+        <thead>
+            <tr>
+                <th>班级编号</th>
+                <th>班级名称</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+         {% for class in classe %}
+            <tr>
+                <td>{{ class.classId}}</td>
+                <td>{{ class.className }}</td>
+                <td><a href="#">编辑</a>|<a href="#" class="del_class">删除</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="modal hide">
+        <form action="{% url 'classes' %}" method="POST">
+            {% csrf_token %}
+            <p>
+                <input type="text" placeholder="班级编号" name="classId">
+            </p>
+            <p>
+                <input type="text" placeholder="班级名称" name='className'>
+             </p>
+            <!-- <input type="submit" value="Submit确定"> -->
+            <input type="button" id="modal_ajax_submit" value="Ajax确定">
+            <input id="cancel" type="button" value="取消">
+        </form>
+
+    </div>
+    <div class="shade hide"></div>
+
+    <div class="remove hide">
+        <input id="del_item" type="submit" value="确定">
+        <input id="cancel2" type="button" value="取消">
+    </div>
+
+    <div class="pagination">
+        {{ page_list|safe }}
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    <script>
+        $(
+            function(){
+                bindAddEvent();
+                bindCancelEvent();
+                bindDelClassEvent();
+                bindSubmitModal();
+                bindDelItemEvent();
+            }
+        );
+        function bindAddEvent(){
+            $('#add_class').click(function(){
+                $('.modal, .shade').removeClass('hide');
+            }
+            );
+        }
+        function bindCancelEvent(){
+            $("#cancel, #cancel2").click(function(){
+                $('.modal, .shade, .remove').addClass('hide');
+            }
+            );
+        }
+        function bindDelClassEvent(){
+            /*
+            $(".del_class").click(function(){
+                $(".remove, .shade").removeClass('hide');
+            });*/
+            $("tbody").on('click', '.del_class', function(){
+                $(".remove, .shade").removeClass('hide');
+            })
+   
+        }
+        function bindDelItemEvent(){
+            $("#del_item").click(function(){
+                alert("123");
+            });
+        }
+        function bindSubmitModal(){
+            $("#modal_ajax_submit").click(function(){
+                var classId2 = $(".modal input[name='classId']").val();
+                var className2 = $(".modal input[name='className']").val();
+                $.ajax({
+                    url: "/classes/",
+                    type: 'POST',
+                    data: {"classId":classId2, "className":className2},
+                    dataType: "JSON",
+                    success: function(data){
+                        if(!data.status){
+                            alert(data.error);
+                        }else{
+                            //location.reload();
+                           console.log(data.write);
+                            if(!data.write){
+                                var tr = document.createElement('tr');
+                                var td1 = document.createElement('td');
+                                td1.innerHTML = data.data.classId
+                                var td2 = document.createElement('td');
+                                td2.innerHTML = data.data.className;
+                                var td3 = document.createElement('td');
+                                td3.innerText = "|";
+                                var a1 = document.createElement('a');
+                                a1.innerHTML = '编辑';
+                                var a2 = document.createElement('a');
+                                a2.innerHTML = "删除";
+                                a2.className = 'del_class';
+                                $(td3).prepend(a1);
+                                $(td3).append(a2);
+                                $(tr).append(td1);
+                                $(tr).append(td2);
+                                $(tr).append(td3);
+                                $('table tbody').append(tr);
+                                $('.modal, .shade').addClass('hide');
+                            }     
+                        }
+                    }
+                })
+            });
+        }
+    </script>
+{% endblock js %}

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- <form action="{% url 'student' %}" method="POST" enctype="multipart/form-data">
+        <input type="file" name="img" id="img">
+        <input type="submit" value="提交">
+        <input type="button" value="提交XML" onclick="UploadXML()">
+        <input type="button" value="提交Jquery" onclick="UploadJq()">
+    </form>
+
+    <div id='imgs'>
+         {% if url %}
+        <img src="\{{ url }}" style="width:200px;height:200px" alt="123"> {% endif %}
+    </div>
+
+    <script src="/static/jquery-3.3.1.js"></script>
+    <script>
+        function UploadXML(){
+            var dic = new FormData();
+            dic.append('user', 'whn')
+            dic.append('img', document.getElementById('img').files[0])
+
+            var xml = new XMLHttpRequest();
+            xml.open('post', '{% url "student" %}', true)
+            xml.onreadystatechange=function(){
+                if(xml.readyState==4 && xml.status==200)
+                {
+                    var i = JSON.parse(xml.responseText);
+                    var img = document.createElement("img")
+                    img.setAttribute('src', "/" + i.files)
+                    var images = document.getElementById("imgs")
+                    images.appendChild(img)
+                }
+            }
+            xml.send(dic);
+        }
+        function UploadJq(){
+            var dic = new FormData();
+            dic.append('user', 'whn')
+            dic.append('img', document.getElementById('img').files[0])
+
+            $.ajax({
+                ur:'{% url "student" %}',
+                type:'POST',
+                data: dic,
+                dataType: 'JSON',
+                processData: false,
+                contentType: false,
+                success:function(args){
+                    var img = document.createElement("img");
+                    img.src = "/" + args.files;
+                    $("#imgs").append(img);
+                }
+
+            })
+        }
+    </script> -->
+    <div id="imgs"></div>
+    <form action="{% url 'student'%}" method="POST" target="iframe" enctype="multipart/form-data">
+        <iframe id="iframe" name="iframe" onload="IframeOnload()" style="display:none;"></iframe>
+        <input type="text" name="user" />
+        <input type="file" name="file" />
+        <input type="submit" />
+    </form>
+    <script src="/static/jquery-3.3.1.js"></script>
+    <script>
+        function IframeOnload(){
+            var str = $("#iframe").contents().find('body').text();
+            var i = document.createElement('img');
+            i.src = "/" + str;
+            $("#imgs").append(i);
+        }
+    </script>
+{% endblock content %}
